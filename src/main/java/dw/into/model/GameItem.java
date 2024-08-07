@@ -11,9 +11,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "store_item")
-public class StoreItem {
+@Table(name = "gameItem")
+public class GameItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int storeItemId;
+    private long gameItemId;
+
+    @ManyToOne
+    @JoinColumn
+    private GameCart gameCart;
+
+    @Column
+    private String gameItemName;
+
+    @Column
+    private int gameItemPrice;
 }

@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "cart")
-public class Cart {
+@Table(name = "purchase")
+public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long cartId;
+    private long purchaseId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,7 +30,7 @@ public class Cart {
     @Column(name="purchase_time")
     private LocalDateTime purchaseTime;
 
-    public Cart(StoreItem storeItem, User user, LocalDateTime purchaseTime) {
+    public Purchase(StoreItem storeItem, User user, LocalDateTime purchaseTime) {
         this.storeItem = storeItem;
         this.user = user;
         this.purchaseTime = purchaseTime;
