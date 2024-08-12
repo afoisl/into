@@ -36,7 +36,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/js/**"),
                                 new AntPathRequestMatcher("/img/**"),
                                 new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/into/**")
+                                new AntPathRequestMatcher("/into/**"),
+                                new AntPathRequestMatcher("/api/**")
                         ).permitAll()
 //                        .requestMatchers("/uploads/**").denyAll()
                         .anyRequest().authenticated())

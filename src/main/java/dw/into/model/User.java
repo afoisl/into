@@ -24,10 +24,6 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private String userId;
 
-    @ManyToOne
-    @JoinColumn
-    private Authority authority;
-
     @Column(name = "user_name", nullable = false)
     private String name;
 
@@ -60,6 +56,14 @@ public class User implements UserDetails {
 
     @Column
     private int point;
+
+
+    @ManyToOne
+    @JoinColumn
+    private Authority authority;
+
+    public User(String userId, String name, String encode, LocalDate birthDate, String phoneNumber, String address, String first, String email, String nickname, Authority authority) {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

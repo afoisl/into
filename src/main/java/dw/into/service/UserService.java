@@ -1,5 +1,7 @@
 package dw.into.service;
 
+import dw.into.dto.UserDto;
+import dw.into.model.Authority;
 import dw.into.model.User;
 import dw.into.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -33,4 +35,26 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public String saveUser(UserDto userDto) {
+        Optional<User> userById = userRepository.findByUserId(userDto.getUserId());
+        Optional<User> userByNickname = userRepository.findByNickname(userDto.getNickname());
+        if (userById.isPresent() || userByNickname.isPresent()) {
+            return "0"; // userId 또는 nickname 중 하나라도 중복되는 경우
+        } else {
+            Authority authority = new Authority();
+            authority.setAuthorityName("ROLE_USER");
+            User user = new User(
+                    userDto.getUserId(),
+                    userDto.getName(),
+                    bCryptPasswordEncoder.encode(userDto.getPassword()),
+                    userDto.getBirthDate(),
+                    userDto.getPhoneNumber(),
+                    userDto.getAddress(),
+                    userDto.getGender().getFirst(),
+                    userDto.getEmail(),
+                    userDto.getNickname(),
+                    authority);
+            return userRepository.save(user).getUserId();
+        }
+    }
 }
