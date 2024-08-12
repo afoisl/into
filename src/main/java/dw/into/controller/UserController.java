@@ -3,8 +3,12 @@ package dw.into.controller;
 import dw.into.dto.SessionDto;
 import dw.into.dto.UserDto;
 import dw.into.model.User;
+import dw.into.service.UserDetailService;
+import dw.into.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +25,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/user")
 public class UserController {
 
+    private UserService userService;
+    private UserDetailService userDetailService;
     private AuthenticationManager authenticationManager;
+    private HttpServletRequest httpServletRequest;
+
+    @Autowired
+    public UserController(UserService userService, UserDetailService userDetailService, AuthenticationManager authenticationManager, HttpServletRequest httpServletRequest) {
+        this.userService = userService;
+        this.userDetailService = userDetailService;
+        this.authenticationManager = authenticationManager;
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> signUp(@RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.saveUser(userDto),
+                HttpStatus.CREATED);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDto userDto, HttpServletRequest request) {
