@@ -50,7 +50,7 @@ public class UserService {
                     userDto.getBirthDate(),
                     userDto.getPhoneNumber(),
                     userDto.getAddress(),
-                    userDto.getGender().getFirst(),
+                    userDto.getGender().get(0),
                     userDto.getEmail(),
                     userDto.getNickname(),
                     authority);

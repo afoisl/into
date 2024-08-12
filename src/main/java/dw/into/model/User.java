@@ -48,21 +48,30 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column
     private String grade;
 
-    @Column(nullable = false)
+    @Column
     private String gameGrade;
 
     @Column
     private int point;
 
-
     @ManyToOne
     @JoinColumn
     private Authority authority;
 
-    public User(String userId, String name, String encode, LocalDate birthDate, String phoneNumber, String address, String first, String email, String nickname, Authority authority) {
+    public User(String userId, String name, String password, LocalDate birthDate, String phoneNumber, String address, String gender, String email, String nickname, Authority authority) {
+        this.userId = userId;
+        this.name = name;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.gender = gender;
+        this.email = email;
+        this.nickname = nickname;
+        this.authority = authority;
     }
 
     @Override
@@ -77,7 +86,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return userId;
     }
 
     @Override
