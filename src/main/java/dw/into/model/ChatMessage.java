@@ -1,7 +1,6 @@
 package dw.into.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,10 @@ import java.awt.*;
 @Getter
 @Setter
 public class ChatMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long ChatMessageId;
+
     private ChatMessage.MessageType type;
     private String content;
     private String sender;
