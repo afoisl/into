@@ -31,5 +31,5 @@ public class QnA {
     private String text;
 
     @Column
-    private LocalDateTime QnATime;
+    private LocalDate writeDate;
 }

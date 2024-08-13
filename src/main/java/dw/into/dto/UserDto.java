@@ -39,7 +39,7 @@ public class UserDto {
     private String address;
 
     //    @NotBlank
-    private List<String> gender;
+    private String gender;
 
     //    @NotBlank
     //    @Email
