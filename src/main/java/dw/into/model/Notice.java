@@ -24,9 +24,9 @@ public class Notice {
     private User user;
 
     @Column
-    private String title;
+    private String title;   
 
-    @Column
+    @Column(length = 65535)
     private String content;
 
     @Column

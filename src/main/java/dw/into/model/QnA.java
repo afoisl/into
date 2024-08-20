@@ -27,7 +27,7 @@ public class QnA {
     @Column
     private String title;
 
-    @Column
+    @Column(length = 65535)
     private String text;
 
     @Column
