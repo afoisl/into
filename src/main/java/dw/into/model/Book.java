@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,10 +15,6 @@ import lombok.Setter;
 @Table(name = "book")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bookId;
-
-    @ManyToOne
     @JoinColumn
     private StoreItem storeItem;
 

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,4 +18,10 @@ public class StoreItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int storeItemId;
+
+    @Column
+    private long ItemPrice;
+
+    @Column
+    private LocalDate CreateAt;
 }

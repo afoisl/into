@@ -14,13 +14,9 @@ import lombok.Setter;
 @Table(name = "mock_ticket")
 public class MockTicket {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ticketId;
+    @JoinColumn
+    private StoreItem storeItem;
 
     @Column
     private int ticketPrice;
-
-    @ManyToOne
-    @JoinColumn
-    private StoreItem storeItem;
 }

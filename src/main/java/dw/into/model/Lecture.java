@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.Store;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,16 +16,12 @@ import lombok.Setter;
 public class Lecture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long lectureId;
+    @JoinColumn
+    private StoreItem storeItem;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
-
-    @ManyToOne
-    @JoinColumn
-    private StoreItem storeItem;
 
     @Column(name = "lecture_name")
     private String lectureName;
