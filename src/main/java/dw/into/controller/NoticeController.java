@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/notices")
+@RequestMapping("/api/notice")
 public class NoticeController {
     private final NoticeService noticeService;
 
