@@ -21,7 +21,4 @@ public class Mock {
 
     @Column
     private String mockImg;
-
-    @Column
-    private String mockPrice;
 }

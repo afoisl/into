@@ -17,6 +17,9 @@ public class MockTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ticketId;
 
+    @Column
+    private int ticketPrice;
+
     @ManyToOne
     @JoinColumn
     private StoreItem storeItem;
