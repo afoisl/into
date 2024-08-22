@@ -17,11 +17,6 @@ public class Book {
     @Id
     private int storeItemId;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "store_item_id")
-    private StoreItem storeItem;
-
     @Column
     private String bookName;
 
