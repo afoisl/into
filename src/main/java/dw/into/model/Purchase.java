@@ -30,6 +30,10 @@ public class Purchase {
     @Column(name="purchase_time")
     private LocalDateTime purchaseTime;
 
+    @OneToOne
+    @JoinColumn
+    private Delivery delivery;
+
     public Purchase(StoreItem storeItem, User user, LocalDateTime purchaseTime) {
         this.storeItem = storeItem;
         this.user = user;

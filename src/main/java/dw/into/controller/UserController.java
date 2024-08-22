@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Controller
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -73,5 +74,10 @@ public class UserController {
         sessionDto.setUserId(authentication.getName());
         sessionDto.setAuthority(authentication.getAuthorities());
         return sessionDto;
+    }
+
+    @GetMapping("/id/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable String userId) {
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 }

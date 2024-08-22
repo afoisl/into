@@ -17,6 +17,10 @@ public class StudyRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int StRoomId;
 
+    @ManyToOne
+    @JoinColumn
+    private MockGrade mockGrade;
+
     @OneToOne
     @JoinColumn
     private StudyBoard studyBoard;
