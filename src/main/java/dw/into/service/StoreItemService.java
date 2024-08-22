@@ -16,10 +16,8 @@ import java.util.List;
 public class StoreItemService {
     @Autowired
     StoreItemRepository storeItemRepository;
-
     @Autowired
     BookRepository bookRepository;
-
     @Autowired
     MockTicketRepository mockTicketRepository;
     public List<StoreItem> getAllStoreItems() {
@@ -33,11 +31,11 @@ public class StoreItemService {
 
     public List<Book> getBooksByStoreItemId(int storeItemId) {
         StoreItem storeItem = getStoreItemById(storeItemId);
-        return bookRepository.findByStoreItem(storeItem);
+        return bookRepository.findByStoreItemId(storeItem.getStoreItemId());
     }
 
     public List<MockTicket> getMockTicketsByStoreItemId(int storeItemId) {
         StoreItem storeItem = getStoreItemById(storeItemId);
-        return mockTicketRepository.findByStoreItem(storeItem);
+        return mockTicketRepository.findByStoreItemId(storeItem.getStoreItemId());
     }
 }

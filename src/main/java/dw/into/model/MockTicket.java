@@ -14,8 +14,7 @@ import lombok.Setter;
 @Table(name = "mock_ticket")
 public class MockTicket {
     @Id
-    @JoinColumn
-    private StoreItem storeItem;
+    private int storeItemId;
 
     @Column
     private int ticketPrice;

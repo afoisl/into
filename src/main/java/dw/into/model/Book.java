@@ -15,7 +15,11 @@ import org.hibernate.validator.constraints.br.CPF;
 @Table(name = "book")
 public class Book {
     @Id
-    @JoinColumn
+    private int storeItemId;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "store_item_id")
     private StoreItem storeItem;
 
     @Column

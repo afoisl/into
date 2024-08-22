@@ -14,10 +14,8 @@ import org.apache.catalina.Store;
 @Entity
 @Table(name = "lecture")
 public class Lecture {
-
     @Id
-    @JoinColumn
-    private StoreItem storeItem;
+    private int storeItemId;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
