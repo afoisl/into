@@ -18,4 +18,7 @@ public class MockTicket {
 
     @Column
     private int ticketPrice;
+
+    @Column
+    private String mockTicketName;
 }

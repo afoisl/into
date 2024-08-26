@@ -14,7 +14,9 @@ import org.apache.catalina.Store;
 @Entity
 @Table(name = "lecture")
 public class Lecture {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int storeItemId;
 
     @ManyToOne
@@ -33,12 +35,9 @@ public class Lecture {
     @Column
     private int LecPrice;
 
-    /*@Column(name = "lecture_course")
-    private String lectureCourse;
-
     @Column
-    private String thumbnailImg;
+    private String lectureClass;
 
-    @Column
-    private String lectureClass;*/
+    @Column(length = 65535)
+    private String lecContent;
 }
