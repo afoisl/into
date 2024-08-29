@@ -6,18 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "chat_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "delivery")
-public class Delivery {
+public class ChatUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long deliveryId;
+    private int ChatUserId;
 
-    @OneToOne
-    private Purchase purchase;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn
+    private StudyRoom studyRoom;
 }
-

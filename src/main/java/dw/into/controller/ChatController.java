@@ -1,6 +1,7 @@
 package dw.into.controller;
 
 import dw.into.model.ChatMessage;
+import dw.into.model.ChatUser;
 import dw.into.model.StudyRoom;
 import dw.into.service.ChatService;
 import org.apache.catalina.util.CharsetMapper;
@@ -30,16 +31,28 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage/{roomId}")
     @SendTo("/topic/public/{roomId}")
     public ChatMessage sendMessage(@DestinationVariable("roomId") Integer roomId, ChatMessage chatMessage) {
-        // StudyRoom을 roomId를 사용해 데이터베이스에서 조회
         StudyRoom studyRoom = chatService.findStudyRoomById(roomId);
-
         System.out.println("Received message in room " + studyRoom + ": " + chatMessage);
 
-        ChatMessage savedMessage = chatService.saveMessage(studyRoom, chatMessage);
+        switch (chatMessage.getType()) {
+            case JOIN:
+                chatService.saveChatUser(chatMessage.getSender(), studyRoom);
+                logger.info("User {} joined room {}", chatMessage.getSender(), roomId);
+                break;
+            case LEAVE:
+                chatService.removeChatUser(chatMessage.getSender(), studyRoom);
+                logger.info("User {} left room {}", chatMessage.getSender(), roomId);
+                break;
+            case CHAT:
+                ChatMessage savedMessage = chatService.saveMessage(studyRoom, chatMessage);
+                logger.info("Chat message saved to database: {}", savedMessage);
+                return savedMessage;
+            default:
+                logger.warn("Unknown message type: {}", chatMessage.getType());
+                break;
+        }
 
-        logger.info("Message saved to database: {}", savedMessage);
-
-        return savedMessage;
+        return chatMessage;
     }
 
     @MessageMapping("/chat.addUser")
@@ -53,5 +66,10 @@ public class ChatController {
     @GetMapping("/messages/{roomId}")
     public List<ChatMessage> getMessagesByRoomId(@PathVariable int roomId) {
         return chatService.findMessagesByRoomId(roomId);
+    }
+
+    @GetMapping("/user/{studyRoom}")
+    public List<ChatUser> getChatUserByRoomId(@PathVariable StudyRoom studyRoom) {
+        return chatService.getChatUserByRoomId(studyRoom);
     }
 }

@@ -2,6 +2,8 @@ package dw.into.config;
 
 import dw.into.exception.MyAccessDeniedHandler;
 import dw.into.exception.MyAuthenticationEntryPoint;
+import dw.into.jwt.JwtFilter;
+import dw.into.jwt.TokenProvider;
 import dw.into.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -24,6 +27,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     @Autowired
     private UserDetailService userDetailService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,18 +47,18 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/signup"),
                                 new AntPathRequestMatcher("/ws/**")
                         ).permitAll()
-//                        .requestMatchers("/uploads/**").denyAll()
+                        .requestMatchers("/uploads/**").denyAll()
                         .anyRequest().authenticated())
 //                .formLogin(form->form.loginPage("/login").defaultSuccessUrl("/articles"))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new MyAuthenticationEntryPoint())
                         .accessDeniedHandler(new MyAccessDeniedHandler()))
-//                .addFilterBefore(
-//                        new JwtFilter(tokenProvider),
-//                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                        new JwtFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
