@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +15,5 @@ import lombok.Setter;
 public class TokenDto {
     private String token;
     private String userId;
-    private String authority;
+    private Collection<? extends GrantedAuthority> authority;
 }
