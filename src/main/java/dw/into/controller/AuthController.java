@@ -39,13 +39,16 @@ public class AuthController {
                 .authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
+        String userId = loginDto.getUserId();
         String jwt = tokenProvider.createToken(authentication);
+        String authority = authentication.getAuthorities().toString();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(
-                new BaseResponse<>(ResultCode.SUCCESS.name(), new TokenDto(jwt), ResultCode.SUCCESS.getMsg()),
+                new BaseResponse<>(ResultCode.SUCCESS.name(), new TokenDto(jwt, userId, authority), ResultCode.SUCCESS.getMsg()),
                 httpHeaders,
                 HttpStatus.OK);
     }

@@ -11,4 +11,6 @@ import lombok.Setter;
 @Setter
 public class TokenDto {
     private String token;
+    private String userId;
+    private String authority;
 }
