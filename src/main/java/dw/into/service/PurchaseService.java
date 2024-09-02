@@ -1,14 +1,8 @@
 package dw.into.service;
 
 import dw.into.dto.PurchaseResponseDto;
-import dw.into.model.Lecture;
-import dw.into.model.Purchase;
-import dw.into.model.StoreItem;
-import dw.into.model.User;
-import dw.into.repository.LectureRepository;
-import dw.into.repository.PurchaseRepository;
-import dw.into.repository.StoreItemRepository;
-import dw.into.repository.UserRepository;
+import dw.into.model.*;
+import dw.into.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +16,22 @@ public class PurchaseService {
     private final UserRepository userRepository;
     private final StoreItemRepository storeItemRepository;
     private final LectureRepository lectureRepository;
+    private final BookRepository bookRepository;
+    private  final MockTicketRepository mockTicketRepository;
 
     @Autowired
     public PurchaseService(PurchaseRepository purchaseRepository,
                            UserRepository userRepository,
                            StoreItemRepository storeItemRepository,
-                           LectureRepository lectureRepository) {
+                           LectureRepository lectureRepository,
+                           BookRepository bookRepository,
+                           MockTicketRepository mockTicketRepository) {
         this.purchaseRepository = purchaseRepository;
         this.userRepository = userRepository;
         this.storeItemRepository = storeItemRepository;
         this.lectureRepository = lectureRepository;
+        this.bookRepository = bookRepository;
+        this.mockTicketRepository = mockTicketRepository;
     }
 
     @Transactional
@@ -65,10 +65,24 @@ public class PurchaseService {
         dto.setPurchaseTime(purchase.getPurchaseTime());
         dto.setAddress(purchase.getAddress());
 
+        Integer storeItemId = purchase.getStoreItem().getStoreItemId();
+
+
         Lecture lecture = (Lecture) lectureRepository.findByStoreItemId(purchase.getStoreItem().getStoreItemId());
         if (lecture != null) {
             dto.setLecture(lecture);
         }
+        List<Book> books = bookRepository.findByStoreItemId(storeItemId);
+        if (!books.isEmpty()) {
+            dto.setBook(books.get(0));  // 첫 번째 책만 설정
+        }
+
+        List<MockTicket> mockTickets = mockTicketRepository.findByStoreItemId(storeItemId);
+        if (!mockTickets.isEmpty()) {
+            dto.setMockTicket(mockTickets.get(0));  // 첫 번째 모의고사 티켓만 설정
+        }
+
         return dto;
     }
+
 }

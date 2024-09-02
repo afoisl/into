@@ -1,8 +1,6 @@
 package dw.into.dto;
 
-import dw.into.model.Lecture;
-import dw.into.model.StoreItem;
-import dw.into.model.User;
+import dw.into.model.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +11,25 @@ public class PurchaseResponseDto {
     private LocalDateTime purchaseTime;
     private String address;
     private Lecture lecture;
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public MockTicket getMockTicket() {
+        return mockTicket;
+    }
+
+    public void setMockTicket(MockTicket mockTicket) {
+        this.mockTicket = mockTicket;
+    }
+
+    private Book book;
+    private MockTicket mockTicket;
 
     public long getPurchaseId() {
         return purchaseId;
@@ -61,4 +78,8 @@ public class PurchaseResponseDto {
     public void setLecture(Lecture lecture) {
         this.lecture = lecture;
     }
+
+
+
+
 }
