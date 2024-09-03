@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/purchase")
 public class PurchaseController {
 
+
     private final PurchaseService purchaseService;
 
     @Autowired
@@ -33,6 +34,7 @@ public class PurchaseController {
         Purchase savedPurchase = purchaseService.savePurchase(purchase);
         return new ResponseEntity<>(savedPurchase, HttpStatus.CREATED);
     }
+
     @GetMapping
     public List<PurchaseResponseDto> getAllPurchasesWithLecture() {
         return purchaseService.getAllPurchasesWithLecture();
@@ -42,5 +44,4 @@ public class PurchaseController {
     public List<Purchase> getAllPurchases() {
         return purchaseService.getAllPurchase();
     }
-
 }

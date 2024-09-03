@@ -36,16 +36,13 @@ public class SecurityConfig {
         return http
                 .authorizeRequests(auth -> auth
                         .requestMatchers(
-                                new AntPathRequestMatcher("/user/**"),
+                                new AntPathRequestMatcher("/api/user/signup"),
+                                new AntPathRequestMatcher("/api/authenticate"),
                                 new AntPathRequestMatcher("/lectures/**"),
-                                new AntPathRequestMatcher("/css/**"),
-                                new AntPathRequestMatcher("/js/**"),
-                                new AntPathRequestMatcher("/img/**"),
                                 new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/into/**"),
-                                new AntPathRequestMatcher("/api/**"),
-                                new AntPathRequestMatcher("/signup"),
-                                new AntPathRequestMatcher("/ws/**")
+                                new AntPathRequestMatcher("/ws/**"),
+                                new AntPathRequestMatcher("/error")
                         ).permitAll()
                         .requestMatchers("/uploads/**").denyAll()
                         .anyRequest().authenticated())

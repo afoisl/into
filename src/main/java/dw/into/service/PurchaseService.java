@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PurchaseService {
+
     private final PurchaseRepository purchaseRepository;
     private final UserRepository userRepository;
     private final StoreItemRepository storeItemRepository;
@@ -68,19 +69,14 @@ public class PurchaseService {
         Integer storeItemId = purchase.getStoreItem().getStoreItemId();
 
 
-        Lecture lecture = (Lecture) lectureRepository.findByStoreItemId(purchase.getStoreItem().getStoreItemId());
-        if (lecture != null) {
-            dto.setLecture(lecture);
-        }
+        List<Lecture> lectures = lectureRepository.findByStoreItemId(storeItemId);
+        dto.setLectures(lectures);
+
         List<Book> books = bookRepository.findByStoreItemId(storeItemId);
-        if (!books.isEmpty()) {
-            dto.setBook(books.get(0));  // 첫 번째 책만 설정
-        }
+        dto.setBooks(books);
 
         List<MockTicket> mockTickets = mockTicketRepository.findByStoreItemId(storeItemId);
-        if (!mockTickets.isEmpty()) {
-            dto.setMockTicket(mockTickets.get(0));  // 첫 번째 모의고사 티켓만 설정
-        }
+        dto.setMockTickets(mockTickets);
 
         return dto;
     }
