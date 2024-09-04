@@ -21,7 +21,7 @@ public class Reply {
     private String replyText;
 
     @ManyToOne
-    @JoinColumn(name = "freeBoard_id")
+    @JoinColumn(name = "qna_id")
     private QnA qnA;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package dw.into.service;
 
+import dw.into.model.Notice;
 import dw.into.model.QnA;
 import dw.into.repository.QnaRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,16 @@ public class QnaService {
         return qnaRepository.findAll();
     }
 
-    public QnA saveQna(QnA qnA) {
-        return qnaRepository.save(qnA);
+
+
+
+    public String saveQna(QnA qnA) {
+        QnA temp = qnaRepository.save(qnA);
+        if (temp.getQnAId() > 0) {
+            return "Success";
+        }else {
+            throw new RuntimeException("qna error");
+        }
     }
 
     public void deleteQna(Long id) {

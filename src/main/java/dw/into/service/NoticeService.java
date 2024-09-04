@@ -23,8 +23,13 @@ public class NoticeService {
         return noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
     }
 
-    public Notice saveNotice(Notice notice) {
-        return noticeRepository.save(notice);
+    public String saveNotice(Notice notice) {
+        Notice temp = noticeRepository.save(notice);
+        if (temp.getNoticeId() > 0) {
+            return "Success";
+        }else {
+            throw new RuntimeException("notice error");
+        }
     }
 
     public Notice updateNotice(Long id, Notice updatedNotice) {

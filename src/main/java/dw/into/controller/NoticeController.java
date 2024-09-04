@@ -30,7 +30,7 @@ public class NoticeController {
     }
 
     @PostMapping
-    public Notice createNotice(@RequestBody Notice notice) {
+    public String createNotice(@RequestBody Notice notice) {
         return noticeService.saveNotice(notice);
     }
 

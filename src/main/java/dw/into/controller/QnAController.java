@@ -23,7 +23,7 @@ public class QnAController {
     }
 
     @PostMapping
-    public QnA saveQna(@RequestBody QnA qnA) {
+    public String createQna(@RequestBody QnA qnA) {
         return qnaService.saveQna(qnA);
     }
 
