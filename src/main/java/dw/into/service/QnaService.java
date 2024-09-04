@@ -15,10 +15,14 @@ public class QnaService {
         this.qnaRepository = qnaRepository;
     }
 
+    public QnA getQnAById(Long qnaId) {
+        return qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId));
+    }
+
     public List<QnA> getAllQnas() {
         return qnaRepository.findAll();
     }
-
 
 
 

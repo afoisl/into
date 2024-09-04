@@ -57,4 +57,9 @@ public class UserService {
             return userRepository.save(user).getUserId();
         }
     }
+    public User getUserByUserId(String userID) {
+        return userRepository.findByUserId(userID)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + userID));
+    }
+
 }
