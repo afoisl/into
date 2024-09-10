@@ -2,16 +2,16 @@ package dw.into.service;
 
 import dw.into.model.*;
 import dw.into.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MockService {
@@ -37,22 +37,26 @@ public class MockService {
     @Autowired
     private MockGradeRepository mockGradeRepository;
 
+    @Autowired
+    private  PurchasedMockTicketRepository purchasedMockTicketRepository;
 
     public Mock getMockById(int mockId) {
         return mockRepository.findById(mockId)
                 .orElseThrow(() -> new RuntimeException("Mock not found with id: " + mockId));
     }
 
-    @Transactional
-    public boolean useTicket(User user, Mock mock) {
-        Optional<MockTicket> optionalTicket = mockTicketRepository.findByUserAndMockAndIsUsedFalse(user, mock);
-        if (optionalTicket.isPresent()) {
-            MockTicket ticket = optionalTicket.get();
-            ticket.setUsed(true);
-            mockTicketRepository.save(ticket);
-            return true;
-        }
-        return false;
+    public PurchasedMockTicket saveTicket(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        PurchasedMockTicket ticket = new PurchasedMockTicket();
+        ticket.setUser(user);
+
+        return purchasedMockTicketRepository.save(ticket);
+    }
+
+    public List<PurchasedMockTicket> getTicketsByUserId(User user) {
+        return purchasedMockTicketRepository.findByUser(user);
     }
 
     public List<MockQuestion> getMockQuestions(int mockId) {
@@ -65,11 +69,11 @@ public class MockService {
     }
 
     @Transactional
-    public void saveUserAnswers(User user, Mock mock, Map<Long, String> answers) {
+    public void saveUserAnswers(User user, Mock mock, String answers) {
         MockResult mockResult = new MockResult();
         mockResult.setUser(user);
         mockResult.setMock(mock);
-        mockResult.setUserAnswers(answers);  // Map으로 된 사용자의 답변을 설정합니다.
+        mockResult.setUserAnswers(answers);
         mockResultRepository.save(mockResult);
     }
 
@@ -80,11 +84,26 @@ public class MockService {
             MockResult mockResult = optionalMockResult.get();
             List<MockQuestion> questions = mockQuestionRepository.findByMock(mock);
             int score = 0;
+
+            String userAnswersJson = mockResult.getUserAnswers();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode userAnswersNode;
+
+            try {
+                userAnswersNode = objectMapper.readTree(userAnswersJson);
+            } catch (Exception e) {
+                throw new RuntimeException("사용자 답안 JSON 파싱 실패", e);
+            }
+
             for (MockQuestion question : questions) {
                 String correctAnswer = question.getCorrectAnswer();
-                String userAnswer = mockResult.getUserAnswers().get(question.getId());
-                if (correctAnswer.equals(userAnswer)) {
-                    score += 10; // 각 정답당 점수 부여 (예: 10점)
+                String questionId = String.valueOf(question.getId());
+
+                if (userAnswersNode.has(questionId)) {
+                    String userAnswer = userAnswersNode.get(questionId).asText();
+                    if (correctAnswer.equals(userAnswer)) {
+                        score += 90;
+                    }
                 }
             }
 
@@ -96,14 +115,18 @@ public class MockService {
 
             return score;
         }
-        return 0; // MockResult가 없을 경우 0점 반환
+        return 0;
     }
 
     @Transactional
-    public void saveGrade(User user, Mock mock, int score) {
+    public void saveGrade(String userId, Mock mock, int score) {
         Optional<MockGrade> optionalGrade = mockGradeRepository.findByHighLimitGreaterThanEqualAndLowLimitLessThanEqual(score, score);
         if (optionalGrade.isPresent()) {
             MockGrade mockGrade = optionalGrade.get();
+
+            // userId로 기존 User 조회
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
             mockGrade.setUser(user);
             mockGrade.setMock(mock);
             mockGradeRepository.save(mockGrade);
@@ -116,5 +139,11 @@ public class MockService {
 
     public List<MockResult> getUserResults(User user) {
         return mockResultRepository.findByUser(user);
+    }
+
+    public List<MockScore>getMockScoreByUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mockScoreRepository.findByUser(user);
     }
 }
