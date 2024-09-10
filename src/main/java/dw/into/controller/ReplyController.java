@@ -30,8 +30,8 @@ public class ReplyController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ReplyDto> saveReply(@RequestBody ReplyDto replyDto, String userId) {
-        User user = userService.getUserById(userId);
+    public ResponseEntity<ReplyDto> saveReply(@RequestBody ReplyDto replyDto) {
+        User user = userService.getUserById(replyDto.getUserId());
 
         Reply reply = new Reply();
         reply.setUser(user);
