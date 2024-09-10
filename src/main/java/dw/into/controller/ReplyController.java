@@ -8,10 +8,15 @@ import dw.into.service.ReplyService;
 import dw.into.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/api/reply")
@@ -25,9 +30,8 @@ public class ReplyController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ReplyDto> saveReply(@RequestBody ReplyDto replyDto, @RequestHeader("Authorization") String token) {
-        // JWT 토큰에서 사용자 정보 추출
-        User user = userService.getUserFromToken(token.replace("Bearer ", ""));
+    public ResponseEntity<ReplyDto> saveReply(@RequestBody ReplyDto replyDto, String userId) {
+        User user = userService.getUserById(userId);
 
         Reply reply = new Reply();
         reply.setUser(user);
