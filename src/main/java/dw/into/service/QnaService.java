@@ -1,11 +1,11 @@
 package dw.into.service;
 
-import dw.into.model.Notice;
 import dw.into.model.QnA;
 import dw.into.repository.QnaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QnaService {
@@ -15,16 +15,14 @@ public class QnaService {
         this.qnaRepository = qnaRepository;
     }
 
-    public QnA getQnAById(Long qnaId) {
-        return qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId));
+    public Optional<QnA> getQnAById(Long qnaId) {
+        return Optional.ofNullable(qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new RuntimeException("QnA not found with ID: " + qnaId)));
     }
 
     public List<QnA> getAllQnas() {
         return qnaRepository.findAll();
     }
-
-
 
     public String saveQna(QnA qnA) {
         QnA temp = qnaRepository.save(qnA);
@@ -38,4 +36,5 @@ public class QnaService {
     public void deleteQna(Long id) {
         qnaRepository.deleteById(id);
     }
+
 }

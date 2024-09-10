@@ -58,6 +58,36 @@ public class PurchaseService {
                 .collect(Collectors.toList());
     }
 
+    public List<PurchaseResponseDto> getPurchasesByUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Purchase> purchases = purchaseRepository.findByUser(user);
+        return purchases.stream()
+                .map(this::convertToPurchaseResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isLecturePurchasedByUser(String userId, int storeItemId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Purchase> userPurchases = purchaseRepository.findByUser(user);
+
+        return userPurchases.stream()
+                .anyMatch(purchase -> purchase.getStoreItem().getStoreItemId() == storeItemId);
+    }
+
+    public List<Lecture> getPurchasedLecturesByUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Purchase> userPurchases = purchaseRepository.findByUser(user);
+
+        return userPurchases.stream()
+                .map(purchase -> lectureRepository.findById(purchase.getStoreItem().getStoreItemId()))
+                .filter(java.util.Optional::isPresent)
+                .map(java.util.Optional::get)
+                .collect(Collectors.toList());
+    }
+
     private PurchaseResponseDto convertToPurchaseResponseDto(Purchase purchase) {
         PurchaseResponseDto dto = new PurchaseResponseDto();
         dto.setPurchaseId(purchase.getPurchaseId());
@@ -80,5 +110,6 @@ public class PurchaseService {
 
         return dto;
     }
+
 
 }

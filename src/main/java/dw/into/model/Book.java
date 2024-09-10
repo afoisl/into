@@ -22,4 +22,7 @@ public class Book {
 
     @Column
     private int bookPrice;
+
+    @Column
+    private String bookImg;
 }

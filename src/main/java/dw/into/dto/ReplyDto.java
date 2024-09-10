@@ -16,16 +16,16 @@ import java.time.LocalDate;
 @Setter
 public class ReplyDto {
     private long replyId;
-    private User userId;
-    private QnA qnAId;
+    private String userId;  // User 객체 대신 ID만 사용
+    private Long qnAId;   // QnA 객체 대신 ID만 사용
     private String text;
     private LocalDate replyTime;
 
     public ReplyDto toReplyDtoFromReply(Reply reply) {
         ReplyDto replyDto = new ReplyDto();
         replyDto.setReplyId(reply.getReplyId());
-        replyDto.setUserId(reply.getUser());
-        replyDto.setQnAId(reply.getQnA());
+        replyDto.setUserId(reply.getUser().getUserId());  // User 객체에서 ID 추출
+        replyDto.setQnAId(reply.getQnA().getQnAId());     // QnA 객체에서 ID 추출
         replyDto.setText(reply.getReplyText());
         replyDto.setReplyTime(reply.getReplyTime());
         return replyDto;

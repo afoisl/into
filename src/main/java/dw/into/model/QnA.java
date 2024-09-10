@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "QnA")
 public class QnA {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qnAId;
@@ -32,4 +33,5 @@ public class QnA {
 
     @Column
     private LocalDate writeDate;
+
 }

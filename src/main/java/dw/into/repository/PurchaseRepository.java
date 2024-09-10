@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
-    List<Purchase> findByUser_UserId(String userId);
+    List<Purchase> findByUser(User user);
+
 }

@@ -23,10 +23,12 @@ public class PurchaseController {
 
 
     private final PurchaseService purchaseService;
+    private final UserService userService;
 
     @Autowired
-    public PurchaseController(PurchaseService purchaseService) {
+    public PurchaseController(PurchaseService purchaseService, UserService userService) {
         this.purchaseService = purchaseService;
+        this.userService = userService;
     }
 
     @PostMapping("/save")
@@ -44,4 +46,25 @@ public class PurchaseController {
     public List<Purchase> getAllPurchases() {
         return purchaseService.getAllPurchase();
     }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PurchaseResponseDto>> getUserPurchases(@PathVariable String userId) {
+        List<PurchaseResponseDto> purchases = purchaseService.getPurchasesByUser(userId);
+        return ResponseEntity.ok(purchases);
+    }
+
+    @GetMapping("/check/{userId}/{storeItemId}")
+    public ResponseEntity<Boolean> checkLecturePurchased(@PathVariable String userId, @PathVariable int storeItemId) {
+        boolean isPurchased = purchaseService.isLecturePurchasedByUser(userId, storeItemId);
+        return ResponseEntity.ok(isPurchased);
+    }
+
+
+    @GetMapping("/user/{userId}/lectures")
+    public ResponseEntity<List<Lecture>> getPurchasedLectures(@PathVariable String userId) {
+        List<Lecture> purchasedLectures = purchaseService.getPurchasedLecturesByUser(userId);
+        return ResponseEntity.ok(purchasedLectures);
+    }
+
 }

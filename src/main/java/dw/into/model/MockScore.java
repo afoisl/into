@@ -20,11 +20,13 @@ public class MockScore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int scoreId;
 
-    @OneToOne
-    @JoinColumn
+    private int score;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn
-    private Mock mock;
+    @JoinColumn(name = "mock_id")
+    private Mock mock; // 어떤 시험의 점수인지
 }
