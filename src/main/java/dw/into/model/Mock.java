@@ -23,15 +23,4 @@ public class Mock {
     @Column
     private String mockImg;
 
-    private String title;
-    private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    // 문제와 시험의 일대다 관계
-    @OneToMany(mappedBy = "mock")
-    private List<MockQuestion> questions;
-
 }
